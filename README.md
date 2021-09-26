@@ -4,7 +4,7 @@ Dieses Package wird im Rahmen der Projektarbeit 1 erstellt und soll zur Unterst�
 Funktionalitäten angeboten werden, um additiv Störgeräusche einem Audiodatensatz hinzuzufügen und diese zu
 Visualisieren.
 
-## [Störgeräusche](noise/README.md):
+## [Störgeräusche](noise_data/README.md):
 
 * Klimaanlage
 * Straße
@@ -16,17 +16,20 @@ Visualisieren.
 
 ## Funktionalität:
 
-1. Einem Audiosignal additiv ein Störgeräusch hinzufügen:
+<font color="red"> <u>NOTE</u> : </font> Hierbei handelt es sich um eine Richtlinie. 
+
+1. Rauschen numerisch laden 6x5*16k ? :
    ```python
-   data = "path/to/audiofile.wav"
-   noisyData = package.addNoise(data, selectedNoise)
-   # selectedNoise := {aircon, dishwasher, vacuuming, street, washer}
+   from sample import loadData, helpers
+   
+   noise_type = loadData.processedNoise(type)
+   # type := {aircon, dishwasher, vacuuming, street, washer}
    ```
-2. Rauschdaten laden:
+2. Einem Audiosignal additiv ein Störgeräusch hinzufügen:
    ```python
-   noisyData = package.aircon.loadNoise()
-   noisyData = package.street.loadNoise()
-   ...
+   path = "path/to/audiofile.wav" # sampled in 16KHz
+   data = load(path)
+   noisyData = helpers.addNoise(data, noise_type)
    ```
 3. Verrauschtes Signal darstellen:
    ```python
@@ -37,6 +40,8 @@ Visualisieren.
 
 ---
 
-## Installation:
+## Usage/Import:
 
-...
+```python
+from sample import loadData, helpers
+```
