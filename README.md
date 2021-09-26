@@ -27,7 +27,7 @@ __*NOTE*__ : Hierbei handelt es sich um eine Richtlinie.
    # type := {aircon, dishwasher, vacuuming, street, washer}
    ```
    
-+Einem Audiosignal additiv ein Störgeräusch hinzufügen:
++ Einem Audiosignal additiv ein Störgeräusch hinzufügen:
 
    ```python
    path = "path/to/audiofile.wav" # sampled in 16KHz
