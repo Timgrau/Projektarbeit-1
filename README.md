@@ -16,7 +16,7 @@ Visualisieren.
 
 ## Funktionalität:
 
-<font color="red"> <u>NOTE</u> : </font> Hierbei handelt es sich um eine Richtlinie. 
+<u>NOTE</u> : Hierbei handelt es sich um eine Richtlinie. 
 
 1. Rauschen numerisch laden 6x5*16k ? :
    ```python
