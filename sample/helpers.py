@@ -6,11 +6,9 @@ import shutil
 
 
 def getAllSampleRates(mainPath):
-    """Returns the sample rate of all providing noise_data data
-
-    TODO: @test -> test for path that has no data or wrong file
+    """ Returns the sample rate of all providing noise_data data
     :param mainPath:
-    :return:
+    :return: Array of sample rates
     """
     ret = []
     for files in os.listdir(mainPath):
@@ -19,7 +17,7 @@ def getAllSampleRates(mainPath):
 
 
 def getSampleRates(path, type):
-    """Returns the sample rate of the selected type of noise_data data
+    """ Returns the sample rate of the selected type of noise_data data
     TODO: doc for availabe types
 
     :param path: Following types available: `NOISE_RAW`, `NOISE_PRO`
@@ -37,15 +35,13 @@ def getSampleRates(path, type):
 
 def getDuration(mainPath):
     ret = []
-    for files in os.listdir(mainPath):
-        ret.append(lr.get_duration(filename=mainPath + files))
-        print(files)
+    for file in os.listdir(mainPath):
+        ret.append(lr.get_duration(filename=mainPath + file))
     return ret
 
 
 def copyRawData(safePath):
-    """
-    Function will be called in function resampledNoise to copy noise_data/raw/*.wav
+    """ Function will be called in function resampledNoise to copy noise_data/raw/*.wav
     Do not abuse this function !!
     TODO: Function can just be called in loadData.resampledNoise()
     :param safePath:
@@ -61,7 +57,7 @@ def copyRawData(safePath):
 def copyUseData(safePath):
     """ Function will be called in function resampledNoise to copy use_data/raw/*.wav
     Do not abuse this function !!
-    TODO: Function can just be called in loadData.resampledData()
+    TODO: Function can only be called in loadData.resampledData()
     :param safePath:
     :return:
     """
@@ -70,3 +66,5 @@ def copyUseData(safePath):
             shutil.copy(DATA_RAW + files, safePath + files)
     else:
         raise FileNotFoundError("No such directory: %s" % safePath)
+
+#def concatenateData():
