@@ -17,21 +17,23 @@ def getAllSampleRates(mainPath):
 
 
 def getSampleRates(path, type):
-    """ Returns the sample rate of the selected type of noise_data data
-    TODO: doc for availabe types
-
-    :param path: Following types available: `NOISE_RAW`, `NOISE_PRO`
-    :param type: Following types available: `NOISE_TYPES`
+    """
+    Returns the sample rate of the selected type in given directory/path.
+    TODO: docs with example
+    :param path: path your audio files are stored
+    :param type: name of your starting string
     :return: array of sample rates
     """
     ret = []
     if type in NOISE_TYPES:
-        for file in glob.glob(path + type + "_?" + AUDIOFORMAT):
+        for file in glob.glob(path + type + "_?_?" + AUDIOFORMAT):
             ret.append(lr.get_samplerate(file))
-        return ret
+    elif type == "usage":
+        for file in glob.glob(path + type + "_?_?" + AUDIOFORMAT):
+            ret.append(lr.get_samplerate(file))
     else:
         raise KeyError("Type not found in %s" % path)
-
+    return ret
 
 def getDuration(mainPath):
     ret = []
@@ -39,32 +41,24 @@ def getDuration(mainPath):
         ret.append(lr.get_duration(filename=mainPath + file))
     return ret
 
-
-def copyRawData(safePath):
-    """ Function will be called in function resampledNoise to copy noise_data/raw/*.wav
-    Do not abuse this function !!
-    TODO: Function can just be called in loadData.resampledNoise()
-    :param safePath:
+def copyData(path, savePath):
+    """
+    Copy files from one directory into another.
+    Function will be used for resampling data.
+    :param path: Path where the data you want to copy is stored
+    :param savePath: Path you want to store your copied data
     :return:
     """
-    if os.path.exists(safePath):
-        for files in os.listdir(NOISE_RAW):
-            shutil.copy(NOISE_RAW + files, safePath + files)
-    else:
-        raise FileNotFoundError("No such directory: %s" % safePath)
+    stored = os.path.exists(path)
+    safe = os.path.exists(savePath)
 
-
-def copyUseData(safePath):
-    """ Function will be called in function resampledNoise to copy use_data/raw/*.wav
-    Do not abuse this function !!
-    TODO: Function can only be called in loadData.resampledData()
-    :param safePath:
-    :return:
-    """
-    if os.path.exists(safePath):
-        for files in os.listdir(DATA_RAW):
-            shutil.copy(DATA_RAW + files, safePath + files)
+    if stored and safe:
+        for files in os.listdir(path):
+            shutil.copy(path + files, savePath + files)
     else:
-        raise FileNotFoundError("No such directory: %s" % safePath)
+        if not stored:
+            raise FileNotFoundError("Directory: %s does not exist" % path)
+        if not safe:
+            raise FileNotFoundError("Directory: %s does not exist" % savePath)
 
 #def concatenateData():

@@ -9,8 +9,6 @@ DATA_RAW = "../use_data/raw/"
 DATA_PRO = "../use_data/processed/"
 
 AUDIOFORMAT = ".wav"
-NOISE_LENGTH = 30
-DATA_LENGTH = 3
 DURATION = 5000   # millisec
 
 # Types of noise_data

@@ -3,48 +3,37 @@ import os
 import soundfile
 from pydub import AudioSegment
 
-def resampledNoise(safePath):
+
+def resampledData(path, savePath):
     """
-    Function to safe resampled noise_data to 16KHz
-    :param safePath: Path you want your data to be stored
-    :return: None
+    Takes all the audio files in {path} and resamples them into {savePath}.
+    Sample rate can be changed in module constant.py @ {SAMPLE_RATE}.
+    :param path: Path where the files you want to resample are stored
+    :param savePath: Path where you want to store the resampled files
+    :return:
     """
-    copyRawData(safePath)
+    copyData(path, savePath)
     i = 0
-    for files in os.listdir(safePath):
-        data, sr = soundfile.read(safePath + files)
-        soundfile.write(safePath + files, data, SAMPLE_RATE)
+    for files in os.listdir(savePath):
+        data, sr = soundfile.read(savePath+files)
+        soundfile.write(savePath+files, data, SAMPLE_RATE)
         i += 1
-    print("%s noise files from %s copied and resampled to %s Hz" % (i, NOISE_LENGTH, SAMPLE_RATE))
+    print("%s files from %s resampled to %s Hz and copied into %s" % (i, path, SAMPLE_RATE, savePath))
 
-
-def resampledData(safePath):
+def sliceAudio(path, savePath, duration=DURATION):
     """
-    Function to safe resampled use_data to 16KHz
-    :param safePath: Path you want your data to be stored
-    :return: None
-    """
-    copyUseData(safePath)
-    i = 0
-    for files in os.listdir(safePath):
-        data, sr = soundfile.read(safePath + files)
-        soundfile.write(safePath + files, data, SAMPLE_RATE)
-        i += 1
-    print("%s data files from %s copied and resampled to %s Hz" % (i, DATA_LENGTH, SAMPLE_RATE))
-
-
-def sliceRawData(safePath, path=DATA_RAW, duration=DURATION):
-    """ Test
-    :param safePath: path your sliced data to be stored
-    :param path: Path the audio you want to be sliced is stored
-    :param duration: Duration of chunk's can be changed in constants : `DURATION`
+    Cut data into pieces with same duration, uses ffpmeg.
+    :param savePath: path your sliced files should to be stored
+    :param path: Path the audio files you want to slice are stored
+    :param duration: Duration of piece can be changed in module constants.py @ {DURATION}
     :return:
     """
     for file in os.listdir(path):
         data = AudioSegment.from_file(path + file)
         for i, chunk in enumerate(data[::DURATION]):
             if len(chunk) == DURATION:
-                with open(safePath + file.replace(AUDIOFORMAT, "") + "_%s" % i + ".wav", "wb") as f:
+                with open(savePath + file.replace(AUDIOFORMAT, "") + "_%s" % i + ".wav", "wb") as f:
                     chunk.export(f, format="wav")
             else:
                 print("Duration of last chunk is %s sec file will be ignored" % (len(chunk) / 1000))
+
