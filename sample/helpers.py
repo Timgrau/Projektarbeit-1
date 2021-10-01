@@ -20,6 +20,7 @@ def getSampleRates(path, type):
     """
     Returns the sample rate of the selected type in given directory/path.
     TODO: docs with example
+
     :param path: path your audio files are stored
     :param type: name of your starting string
     :return: array of sample rates
@@ -36,6 +37,12 @@ def getSampleRates(path, type):
     return ret
 
 def getDuration(mainPath):
+    """
+    Return duration time for all audio files in passed path/directory.
+
+    :param mainPath: path to your audio files
+    :return: Array with durations
+    """
     ret = []
     for file in os.listdir(mainPath):
         ret.append(lr.get_duration(filename=mainPath + file))
@@ -45,6 +52,7 @@ def copyData(path, savePath):
     """
     Copy files from one directory into another.
     Function will be used for resampling data.
+
     :param path: Path where the data you want to copy is stored
     :param savePath: Path you want to store your copied data
     :return:

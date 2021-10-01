@@ -1,25 +1,33 @@
 import numpy as np
 
-"""
-Class for doing mathematical calculations
-"""
 
-
-def calcRMS(dataArray):
-    """ Calculates the Root means square of input Data
+def meanPower(dataArray):
+    """ Calculates the mean power of a signal
 
     :param dataArray: numerical data
-    :return: RMS of data (float)
+    :return: mean power of data (float)
     """
-    return np.sqrt(np.mean(dataArray ** 2))
+    return np.mean(np.abs(dataArray)**2)
 
+def snr(power_signal, power_noise):
+    """ Calculates the signal to noise ratio
 
-def calcSNR(RMS_u, RMS_n):
-    """ Calculates the Signal to noise ratio
+    :param power_signal: mean power of signal
+    :param power_noise: mean power of noise
+    :return: logarithmic snr (float)
+    """
+    return 10 * np.log10((power_signal / power_noise))
 
-    :param RMS_u: RMS of use_data
-    :param RMS_n: RMS of nosie_data
+def constant(power_signal, power_noise, snr):
+    """
+    Calculates a constant factor based on wanted signal to noise ratio
+    and mean power of the noise.
+    That factor can be multiplied with the noise array.
+
+    :param power_signal:
+    :param power_noise:
+    :param snr:
     :return:
     """
-    return 10 * np.log10((RMS_u ** 2 / RMS_n ** 2))
-
+    power_required = power_signal*np.power(10, -snr/10)
+    return power_noise / power_required

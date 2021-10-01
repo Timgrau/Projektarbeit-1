@@ -1,43 +1,44 @@
 # Haushaltsrauschen
 
-Momentan sind 30 Daten mit unterschiedlicher Dauer und Abtastrate verfügbar.   
-Die Rauschdaten sind in dem Ordner ``` /noise_data/..``` zu finden, unterteilt in Rohdaten ```/noise_data/raw/```
+Momentan sind 13 Daten mit unterschiedlicher Dauer und einer Abtastrate von 44 KHz verfügbar. 
+Das Rauschen ist in dem Ordner ``` /noise_data/..``` zu finden, unterteilt in Rohdaten ```/noise_data/raw/```
 und aufbereitete Daten ```/noise_data/processed/```.
 
 ## Datenseparierung
 
-* 6x Klimaanlage
-* 6x Spülmaschine
-* 6x Straßenlärm
-* 6x Staubsauger
-* 6x Waschmaschine
+* 3x Klimaanlage
+* 4x Spülmaschine
+* 2x Straßenlärm
+* 3x Staubsauger
+* 1x Waschmaschine
 
 ### Roh
 
-Die __Rauschdaten__ liegen in Unterschiedlicher Dauer, Lautstärke und Abtastrate vor.
+Das __Rauschen__ liegen in unterschiedlicher Dauer und Lautstärke vor, Funktionen aus dem Modul ```loadData.py```
+mithilfe von ```helpers.py``` sollten diese Daten passend vorverarbeiten.
 
-Funktionen aus dem Modul ```helpers.py``` sollten diese Daten passend vorverarbeiten:
+### Vorverarbeitet
+
+Das vorverarbeitete __Rauschen__ sollte in gleicher Abtastrate wie __Nutzdaten__ (22 KHz) vorliegen. Skaliert auf
+eine passende Lautstärke (SNR) sowie Dauer in Bezug zu den __Nutzdaten__ (5 sec). Die ersten 8 sec der __Nutzdaten__ 
+werden durch die Funktion ```sliceAudio(path,savePath)``` entfernt, da diese unrealistische Informationen erhalten.
 
 ```python
 from sample import loadData
 
 # -- Implemented --
-path = "path/to/store/noisy_data"
-loadData.resampledNoise(path)
-loadData.resampledData(path)
-# ---            
+path = "/path/to/find/audio"
+savePath = "path/to/store/audio"
 
-# TODO: [Duration] Work on cutting sound files in 5 sec pieces
-noise = helpers.scaleDuration(path, Duration)
+# Resample audio files and store them  
+loadData.resampledData(path, savePath)
 
-noise = helpers.scaleVolume(path, volume)
+# Slice audio files into pieces with 5 sec duration
+# NOTE: Duration time can be changed in constants.py @ DURATION
+loadData.sliceAudio(path, savePath)
+# ------------------
+
 ```
-
-### Vorverarbeitet
-
-Die vorverarbeiteten __Rauschdaten__ sollten in gleicher Abtastrate wie __Nutzdaten__ (16 KHz) vorliegen. Skaliert auf
-eine passende Lautstärke sowie Dauer in Bezug zu den __Nutzdaten__ (5 sec).
-
 ## Datenbeschaffung
 
 Ein Teil der Daten wurde von mir selbst aufgenommen, der andere Teil wurde von [Freesound.org](https://freesound.org/)

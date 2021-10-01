@@ -1,6 +1,6 @@
 # Static settings for the Project
 
-SAMPLE_RATE = 16000  # Hz
+SAMPLE_RATE = 22050  # Hz
 
 # Path's to access data
 NOISE_RAW = "../noise_data/raw/"
