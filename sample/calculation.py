@@ -7,7 +7,8 @@ def meanPower(dataArray):
     :param dataArray: numerical data
     :return: mean power of data (float)
     """
-    return np.mean(np.abs(dataArray)**2)
+    return np.mean(np.abs(dataArray) ** 2)
+
 
 def snr(power_signal, power_noise):
     """ Calculates the signal to noise ratio
@@ -17,6 +18,7 @@ def snr(power_signal, power_noise):
     :return: logarithmic snr (float)
     """
     return 10 * np.log10((power_signal / power_noise))
+
 
 def constant(power_signal, power_noise, snr):
     """
@@ -29,5 +31,19 @@ def constant(power_signal, power_noise, snr):
     :param snr:
     :return:
     """
-    power_required = power_signal*np.power(10, -snr/10)
+    power_required = power_signal * np.power(10, -snr / 10)
     return power_noise / power_required
+
+
+def add_noise_zero_db(clean_audio, noise):
+    """
+    Add's noise to an clean audio clip (denoised).
+    With an signal to noise ration = 0 dB
+
+    :param clean_audio: denoised audio array
+    :param noise: stationary noise array
+    :return: noisy signal (numpy array)
+    """
+    power_s = np.sum(clean_audio**2)
+    power_n = np.sum(noise**2)
+    return clean_audio + np.sqrt(power_s / power_n) * noise

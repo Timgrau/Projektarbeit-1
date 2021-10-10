@@ -16,7 +16,7 @@ def resampledData(path, savePath):
     copyData(path, savePath)
     i = 0
     for files in os.listdir(savePath):
-        data, sr = soundfile.read(savePath+files)
+        data, sr = lr.load(savePath+files, sr=SAMPLE_RATE, mono=True)
         soundfile.write(savePath+files, data, SAMPLE_RATE)
         i += 1
     print("%s files from %s resampled to %s Hz and copied into %s" % (i, path, SAMPLE_RATE, savePath))
@@ -33,7 +33,7 @@ def sliceAudio(path, savePath, duration=DURATION):
     for file in os.listdir(path):
         data = AudioSegment.from_file(path + file)
         # Cut first 8 sec from use_data, cuz it does mot contain realistic information
-        if path == DATA_RAW:
+        if path == DATA_RAW or path == DATA_RESAMPLED:
             data = data[8000:]
         for i, chunk in enumerate(data[::DURATION]):
             if len(chunk) == DURATION:

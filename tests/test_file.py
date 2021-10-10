@@ -22,13 +22,13 @@ class Test(unittest.TestCase):
         wrong_dir = "home/timo/unit"
         self.assertRaises(FileNotFoundError, lambda: helpers.getAllSampleRates(wrong_dir))
         self.assertRaises(FileNotFoundError, lambda: helpers.copyData(helpers.NOISE_RAW, wrong_dir))
-        self.assertRaises(FileNotFoundError, lambda: loadData.resampledData(wrong_dir, helpers.DATA_PRO))
+        self.assertRaises(FileNotFoundError, lambda: loadData.resampledData(wrong_dir, helpers.DATA_PROCESSED))
 
     def test_samplerate_Exception(self):
         # Test passed
         type = "test"
         self.assertRaises(KeyError, lambda: helpers.getSampleRates(helpers.NOISE_RAW, type))
-        self.assertRaises(KeyError, lambda: helpers.getSampleRates(helpers.NOISE_PRO, type))
+        self.assertRaises(KeyError, lambda: helpers.getSampleRates(helpers.NOISE_PROCESSED, type))
 
     def test_slice_data(self):
         # Test passed

@@ -1,9 +1,11 @@
+import librosa.effects
+
 from sample.constants import *
 import librosa as lr
 import os
 import glob
 import shutil
-
+import numpy as np
 
 def getAllSampleRates(mainPath):
     """ Returns the sample rate of all providing noise_data data
@@ -69,4 +71,11 @@ def copyData(path, savePath):
         if not safe:
             raise FileNotFoundError("Directory: %s does not exist" % savePath)
 
-#def concatenateData():
+
+def removeSilentFrames(data):
+    ret = []
+    indices = librosa.effects.split(data, frame_length=22050, top_db=3)
+
+    for index in indices:
+        ret.extend(data[index[0]: index[1]])
+    return np.array(ret)
