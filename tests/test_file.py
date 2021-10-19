@@ -1,8 +1,8 @@
 import unittest
 import warnings
-from sample import helpers
-from sample import loadData
-
+from sample import helpers,loadData,calculation
+import librosa as lr
+import os
 
 ##### Unit Tests #####
 class Test(unittest.TestCase):
@@ -53,6 +53,16 @@ class Test(unittest.TestCase):
             self.assertEqual(44100, i)
         for j in helpers.getSampleRates(Test.test_dir, "dishwasher"):
             self.assertEqual(44100, j)
+
+    def test_zero_dB_calculation(self):
+        # Test passed
+        for file in os.listdir(helpers.NOISE_PROCESSED):
+            noise, _ = lr.load(helpers.NOISE_PROCESSED + file, sr=helpers.SAMPLE_RATE)
+            for files in os.listdir(helpers.DATA_PROCESSED):
+                audio, _ = lr.load(helpers.DATA_PROCESSED + files, sr=helpers.SAMPLE_RATE)
+                noisee = calculation.meanPower(calculation.get_constant(audio, noise) * noise)
+                # print(round(calculation.snr(calculation.meanPower(audio), noisee)))
+                self.assertEqual(0, round(calculation.snr(calculation.meanPower(audio), noisee)))
 
 if __name__ == "__main__":
     unittest.main()

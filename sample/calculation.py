@@ -47,3 +47,8 @@ def add_noise_zero_db(clean_audio, noise):
     power_s = np.sum(clean_audio**2)
     power_n = np.sum(noise**2)
     return clean_audio + np.sqrt(power_s / power_n) * noise
+
+def get_constant(clean_audio, noise):
+    power_s = np.sum(clean_audio**2)
+    power_n = np.sum(noise**2)
+    return np.sqrt(power_s / power_n)
