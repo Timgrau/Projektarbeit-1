@@ -44,3 +44,10 @@ def sliceAudio(path, savePath, duration=DURATION):
                 print("Duration of last chunk is %s sec file will be ignored" % (len(chunk) / 1000))
                 print("-"*60)
 
+def numericalData(audio_matrix, noise_matrix):
+    """
+    Should provide a matrix maxybe (tensors) with the real input data (added noise).
+    :param audio_matrix:
+    :param noise_matrix:
+    :return:
+    """
