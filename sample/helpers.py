@@ -71,11 +71,15 @@ def copyData(path, savePath):
         if not safe:
             raise FileNotFoundError("Directory: %s does not exist" % savePath)
 
+def getNumpyData(path):
+    """
+    Returns numerical matrix containing audio files
+    :param path:
+    :return:
+    """
+    ret = np.zeros((3,3))
+    for files in os.listdir(path):
+        data, _ = librosa.load(path+files, sr=SAMPLE_RATE, mono=True)
+        ret = np.append(ret, data)
+    return ret
 
-def removeSilentFrames(data):
-    ret = []
-    indices = librosa.effects.split(data, frame_length=22050, top_db=3)
-
-    for index in indices:
-        ret.extend(data[index[0]: index[1]])
-    return np.array(ret)

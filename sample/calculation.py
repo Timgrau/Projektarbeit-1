@@ -20,21 +20,6 @@ def snr(power_signal, power_noise):
     return 10 * np.log10((power_signal / power_noise))
 
 
-def constant(power_signal, power_noise, snr):
-    """
-    Calculates a constant factor based on wanted signal to noise ratio
-    and mean power of the noise.
-    That factor can be multiplied with the noise array.
-
-    :param power_signal:
-    :param power_noise:
-    :param snr:
-    :return:
-    """
-    power_required = power_signal * np.power(10, -snr / 10)
-    return power_noise / power_required
-
-
 def add_noise_zero_db(clean_audio, noise):
     """
     Add's noise to an clean audio clip (denoised).
@@ -49,6 +34,15 @@ def add_noise_zero_db(clean_audio, noise):
     return clean_audio + np.sqrt(power_s / power_n) * noise
 
 def get_constant(clean_audio, noise):
+    """
+    Calculates a constant factor to get 0dB SNR noise
+    and mean power of the noise.
+    That factor can be multiplied with the noise array.
+
+    :param clean_audio:
+    :param noise:
+    :return:
+    """
     power_s = np.sum(clean_audio**2)
     power_n = np.sum(noise**2)
     return np.sqrt(power_s / power_n)
