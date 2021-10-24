@@ -14,11 +14,10 @@ AUDIOFORMAT = ".wav"
 DURATION = 5000   # millisec
 
 # Types of noise_data
-NOISE_TYPES = ["aircon", "dishwasher", "street", "vacuuming", "washer"]
+NOISE_TYPES = ["aircon", "dishwasher", "street", "vacuuming"]
 
 # Path's for specific noise data
 AIR_CONDITION = NOISE_RAW + "aircon_%s" + AUDIOFORMAT
 DISHWASHER = NOISE_RAW + "dishwasher_%s" + AUDIOFORMAT
 VACUUM_CLEANER = NOISE_RAW + "vacuuming_%s" + AUDIOFORMAT
 STREET = NOISE_RAW + "street_%s" + AUDIOFORMAT
-WASHER_M = NOISE_RAW + "washer_%s" + AUDIOFORMAT

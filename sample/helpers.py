@@ -77,9 +77,9 @@ def getNumpyData(path):
     :param path:
     :return:
     """
-    ret = np.zeros((3,3))
+    ret = []
     for files in os.listdir(path):
         data, _ = librosa.load(path+files, sr=SAMPLE_RATE, mono=True)
-        ret = np.append(ret, data)
-    return ret
+        ret.append(data)
+    return np.array(ret)
 

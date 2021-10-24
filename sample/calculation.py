@@ -29,11 +29,12 @@ def add_noise_zero_db(clean_audio, noise):
     :param noise: stationary noise array
     :return: noisy signal (numpy array)
     """
-    power_s = np.sum(clean_audio**2)
-    power_n = np.sum(noise**2)
+    power_s = np.sum(clean_audio ** 2)
+    power_n = np.sum(noise ** 2)
     return clean_audio + np.sqrt(power_s / power_n) * noise
 
-def get_constant(clean_audio, noise):
+
+def get_constant(signal, noise, SNR):
     """
     Calculates a constant factor to get 0dB SNR noise
     and mean power of the noise.
@@ -43,6 +44,20 @@ def get_constant(clean_audio, noise):
     :param noise:
     :return:
     """
-    power_s = np.sum(clean_audio**2)
-    power_n = np.sum(noise**2)
-    return np.sqrt(power_s / power_n)
+    RMS_s = np.sqrt(np.mean(signal ** 2))
+    # required RMS of noise
+    RMS_n = np.sqrt(RMS_s ** 2 / (pow(10, SNR / 10)))
+
+    # current RMS of noise
+    RMS_n_current = np.sqrt(np.mean(noise ** 2))
+    return RMS_n / RMS_n_current
+
+
+def get_noise_from_sound(signal, noise, SNR):
+    RMS_s = np.sqrt(np.mean(signal ** 2))
+    # required RMS of noise
+    RMS_n = np.sqrt(RMS_s ** 2 / (pow(10, SNR / 10)))
+
+    # current RMS of noise
+    RMS_n_current = np.sqrt(np.mean(noise ** 2))
+    return signal + noise * (RMS_n / RMS_n_current)

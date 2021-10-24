@@ -1,4 +1,7 @@
+import numpy as np
+
 from sample.helpers import *
+from sample.calculation import *
 import os
 import soundfile
 from pydub import AudioSegment
@@ -46,8 +49,13 @@ def sliceAudio(path, savePath, duration=DURATION):
 
 def numericalData(audio_matrix, noise_matrix):
     """
-    Should provide a matrix maxybe (tensors) with the real input data (added noise).
+    Should provide a matrix maybe (tensors) with the real input data (added noise).
     :param audio_matrix:
     :param noise_matrix:
     :return:
     """
+    ret = []
+    for i in audio_matrix:
+        ret.append(get_noise_from_sound(noise_matrix, i, 0))
+    return np.array(ret)
+

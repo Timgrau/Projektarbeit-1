@@ -60,7 +60,7 @@ class Test(unittest.TestCase):
             noise, _ = lr.load(helpers.NOISE_PROCESSED + file, sr=helpers.SAMPLE_RATE)
             for files in os.listdir(helpers.DATA_PROCESSED):
                 audio, _ = lr.load(helpers.DATA_PROCESSED + files, sr=helpers.SAMPLE_RATE)
-                power_noise = calculation.meanPower(calculation.get_constant(audio, noise) * noise)
+                power_noise = calculation.meanPower(calculation.get_constant(audio, noise, 0) * noise)
                 # print(round(calculation.snr(calculation.meanPower(audio), noisee)))
                 self.assertEqual(0, round(calculation.snr(calculation.meanPower(audio), power_noise)))
 
