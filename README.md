@@ -2,7 +2,7 @@
 
 Dieses Package wird im Rahmen der Projektarbeit 1 erstellt und soll zur Unterstützung der Projektarbeit 2 dienen. Indem
 Funktionalitäten angeboten werden, um additiv Störgeräusche einem Audiodatensatz hinzuzufügen und diese zu
-Visualisieren. [Präsentation](https://git.ikt.fh-dortmund.de:3000/tigra005/Ausarbeitung-PA1/src/branch/master/abgabe_PA1/ausarbeitung.pdf) und [Ausarbeitung](https://git.ikt.fh-dortmund.de:3000/tigra005/Ausarbeitung-PA1/src/branch/master/abgabe_PA1/ausarbeitung.pdf)
+Visualisieren. [Präsentation](https://git.ikt.fh-dortmund.de:3000/tigra005/Ausarbeitung-PA1/src/branch/master/abgabe_PA1/slides.pdf) und [Ausarbeitung](https://git.ikt.fh-dortmund.de:3000/tigra005/Ausarbeitung-PA1/src/branch/master/abgabe_PA1/ausarbeitung.pdf)
 
 ## [Störgeräusche](noise_data/README.md):
 
