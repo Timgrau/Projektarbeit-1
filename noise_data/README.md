@@ -25,7 +25,7 @@ werden durch die Funktion ```sliceAudio(path,savePath)``` entfernt, da diese unr
 ```python
 from sample import loadData
 
-# -- Implemented --
+
 path = "/path/to/find/audio"
 savePath = "path/to/store/audio"
 
@@ -35,7 +35,15 @@ loadData.resampledData(path, savePath)
 # Slice audio files into pieces with 5 sec duration
 # NOTE: Duration time can be changed in constants.py @ DURATION
 loadData.sliceAudio(path, savePath)
-# ------------------
+
+# check sample rates and duration
+print(loadData.getAllSampleRates(path))
+print(loadData.getDuration(path))
+
+# copy files into other dir's
+copyData(path, savePath)
+
+# etc.------------------
 
 ```
 ## Datenbeschaffung
