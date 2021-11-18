@@ -44,17 +44,17 @@ def get_constant(signal, noise, SNR):
     :param noise:
     :return:
     """
-    RMS_s = np.sqrt(np.mean(signal ** 2))
+    RMS_s = np.sqrt(np.abs(np.mean(signal ** 2)))
     # required RMS of noise
     RMS_n = np.sqrt(RMS_s ** 2 / (pow(10, SNR / 10)))
 
     # current RMS of noise
-    RMS_n_current = np.sqrt(np.mean(noise ** 2))
+    RMS_n_current = np.sqrt(np.abs(np.mean(noise ** 2)))
     return RMS_n / RMS_n_current
 
 
-def get_noise_from_sound(signal, noise, SNR):
-    RMS_s = np.sqrt(np.mean(signal ** 2))
+def get_noisy_sound(signal, noise, SNR):
+    RMS_s = np.sqrt(np.mean((signal ** 2)))
     # required RMS of noise
     RMS_n = np.sqrt(RMS_s ** 2 / (pow(10, SNR / 10)))
 

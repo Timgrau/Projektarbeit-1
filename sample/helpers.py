@@ -79,7 +79,9 @@ def getNumpyData(path):
     """
     ret = []
     for files in os.listdir(path):
+        #print(files)
         data, _ = librosa.load(path+files, sr=SAMPLE_RATE, mono=True)
         ret.append(data)
     return np.array(ret)
+
 

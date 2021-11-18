@@ -19,10 +19,11 @@ def resampledData(path, savePath):
     copyData(path, savePath)
     i = 0
     for files in os.listdir(savePath):
-        data, sr = lr.load(savePath+files, sr=SAMPLE_RATE, mono=True)
-        soundfile.write(savePath+files, data, SAMPLE_RATE)
+        data, sr = lr.load(savePath + files, sr=SAMPLE_RATE, mono=True)
+        soundfile.write(savePath + files, data, SAMPLE_RATE)
         i += 1
     print("%s files from %s resampled to %s Hz and copied into %s" % (i, path, SAMPLE_RATE, savePath))
+
 
 def sliceAudio(path, savePath, duration=DURATION):
     """
@@ -43,9 +44,10 @@ def sliceAudio(path, savePath, duration=DURATION):
                 with open(savePath + file.replace(AUDIOFORMAT, "") + "_%s" % i + ".wav", "wb") as f:
                     chunk.export(f, format="wav")
             else:
-                print("%s got sliced into %s pieces and exported" % (file, i+1))
+                print("%s got sliced into %s pieces and exported" % (file, i + 1))
                 print("Duration of last chunk is %s sec file will be ignored" % (len(chunk) / 1000))
-                print("-"*60)
+                print("-" * 60)
+
 
 def numericalData(audio_matrix, noise_matrix):
     """
@@ -56,6 +58,6 @@ def numericalData(audio_matrix, noise_matrix):
     """
     ret = []
     for i in audio_matrix:
-        ret.append(get_noise_from_sound(noise_matrix, i, 0))
-    return np.array(ret)
-
+        for j in noise_matrix:
+            ret.append(get_noisy_sound(i, j, 10))
+    return np.array(ret).reshape((72, 100, 80000))
