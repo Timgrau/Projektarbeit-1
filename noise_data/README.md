@@ -23,22 +23,21 @@ eine passende Lautstärke (SNR) 0dB sowie Dauer in Bezug zu den __Nutzdaten__ (5
 werden durch die Funktion ```sliceAudio(path,savePath)``` entfernt, da diese unrealistische Informationen erhalten.
 
 ```python
-from sample import loadData
-
+from sample import load_data
 
 path = "/path/to/find/audio"
 savePath = "path/to/store/audio"
 
 # Resample audio files and store them  
-loadData.resampledData(path, savePath)
+loadData.resampled_data(path, savePath)
 
 # Slice audio files into pieces with 5 sec duration
 # NOTE: Duration time can be changed in constants.py @ DURATION
-loadData.sliceAudio(path, savePath)
+loadData.slice_audio(path, savePath)
 
 # check sample rates and duration
-print(loadData.getAllSampleRates(path))
-print(loadData.getDuration(path))
+print(loadData.get_all_sample_rates(path))
+print(loadData.get_duration(path))
 
 # copy files into other dir's
 copyData(path, savePath)

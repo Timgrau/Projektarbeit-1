@@ -16,14 +16,15 @@ Visualisieren. [Präsentation](https://git.ikt.fh-dortmund.de:3000/tigra005/Ausa
 ## Funktionalität:
 
 #### Rausch-/Audiostücke numerisch laden :
+
 ```python
-from sample.loadData import numericalData
-from sample.helpers import getNumpyData
+from sample.load_data import add_noise_to_audio
+from sample.helpers import get_numpy_data
 from sample.constants import DATA_PROCESSED, NOISE_PROCESSED
 
 # 5 second chunks
-noise_numpy = getNumpyData(NOISE_PROCESSED)
-audio_numpy = getNumpyData(DATA_PROCESSED)
+noise_numpy = get_numpy_data(NOISE_PROCESSED)
+audio_numpy = get_numpy_data(DATA_PROCESSED)
 ```
 
 #### Einem Audiosignal additiv Rauschsignale hinzufügen:
