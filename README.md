@@ -15,7 +15,7 @@ Visualisieren. [Präsentation](https://git.ikt.fh-dortmund.de:3000/tigra005/Ausa
 
 ## Funktionalität:
 
-#### Rausch-/Audiostücke numerisch laden :
+#### Rausch-/Audiostücke numerisch laden:
 
 ```python
 from sample.load_data import add_noise_to_audio
