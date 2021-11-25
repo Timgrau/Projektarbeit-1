@@ -6,10 +6,3 @@ python_test:
     script:
         - pip install -r requirements.txt
         - python3 -m unittest
-python_tests:
-    image: python:3.6
-    stage: test
-    script:
-        - pip3 install pipenv
-        - pipenv install
-        - python3 -m unittest
