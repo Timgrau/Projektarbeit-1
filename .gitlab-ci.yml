@@ -1,8 +1,8 @@
 stages:
     - test
-
+    - clear
 python_tests:
-    image: python:3.9
+    image: python:3.8
     stage: test
     script:
         - pip3 install pipenv
