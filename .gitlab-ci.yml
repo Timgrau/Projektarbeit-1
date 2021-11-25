@@ -1,8 +1,13 @@
 stages:
     - test
     - clear
+python_test:
+    stage: test
+    script:
+        - pip install -r requirements.txt
+        - python3 -m unittest
 python_tests:
-    image: python:3.8
+    image: python:3.6
     stage: test
     script:
         - pip3 install pipenv
