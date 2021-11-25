@@ -7,4 +7,4 @@ python_tests:
     script:
         - pip3 install pipenv
         - pipenv install
-        - python3 -m pytest
+        - python3 -m unittest
