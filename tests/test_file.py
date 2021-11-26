@@ -65,8 +65,12 @@ class Test(unittest.TestCase):
 
             for files in os.listdir(TEST_DATA_PROCESSED):
                 audio, _ = lr.load(TEST_DATA_PROCESSED + files, sr=helpers.SAMPLE_RATE)
-                power_noise = calculation.mean_power(calculation.get_constant(audio, noise, 0) * noise)
-                self.assertEqual(0, round(calculation.snr(calculation.mean_power(audio), power_noise)))
+                power_noise = calculation.mean_power(calculation.get_constant(audio, noise, 10) * noise)
+                self.assertEqual(10, round(calculation.snr(calculation.mean_power(audio), power_noise)))
+
+    def test_create_tensor(self):
+        load_data.add_noise_to_audio(helpers.get_numpy_data(TEST_NOISE_PROCESSED),
+                                     helpers.get_numpy_data(TEST_NOISE_PROCESSED))
 
 
 if __name__ == "__main__":

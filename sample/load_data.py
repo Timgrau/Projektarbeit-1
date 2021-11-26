@@ -58,8 +58,8 @@ def add_noise_to_audio(audio_matrix, noise_matrix, signal_to_noise_ratio=10):
     audio signal (row) from the audio_matrix for a desired signal to noise ratio.
     Returns a 3D-Matrix
 
-    :param audio_matrix: matrix containing a discrete audio signal ech row
-    :param noise_matrix: matrix containing a discrete noise signal ech row
+    :param audio_matrix: matrix containing a discrete audio signal each row
+    :param noise_matrix: matrix containing a discrete noise signal each row
     :param signal_to_noise_ratio: desired SNR dB (integer)
     :return: 3D-Matrix or Tensor
     """
@@ -67,7 +67,7 @@ def add_noise_to_audio(audio_matrix, noise_matrix, signal_to_noise_ratio=10):
     ret = []
     shape_audio = audio_matrix.shape[0]
     shape_noise = noise_matrix.shape[0]
-    shape_samples = DURATION*SAMPLE_RATE
+    shape_samples = int(DURATION/1000*SAMPLE_RATE)
 
     for i in audio_matrix:
         for j in noise_matrix:
