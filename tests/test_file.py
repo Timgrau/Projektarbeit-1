@@ -1,7 +1,7 @@
 import glob
 import unittest
 import warnings
-from sample import helpers, load_data, calculation
+from main import helpers, manipulate_data, calculation
 from tests.test_paths import *
 import librosa as lr
 import os
@@ -11,8 +11,8 @@ import os
 class Test(unittest.TestCase):
 
     def test_down_sample(self):
-        load_data.resampled_data(TEST_DATA_RAW, TEST_DIR)
-        load_data.resampled_data(TEST_NOISE_RAW, TEST_DIR)
+        load_data.resample_data(TEST_DATA_RAW, TEST_DIR)
+        load_data.resample_data(TEST_NOISE_RAW, TEST_DIR)
 
         for i in helpers.get_all_sample_rates(TEST_DIR):
             self.assertEqual(i, helpers.SAMPLE_RATE)
@@ -22,13 +22,7 @@ class Test(unittest.TestCase):
 
         self.assertRaises(FileNotFoundError, lambda: helpers.get_all_sample_rates(wrong_dir))
         self.assertRaises(FileNotFoundError, lambda: helpers.copy_data(TEST_NOISE_RAW, wrong_dir))
-        self.assertRaises(FileNotFoundError, lambda: load_data.resampled_data(wrong_dir, TEST_DATA_PROCESSED))
-
-    def test_samplerate_Exception(self):
-        test_type = "test"
-
-        self.assertRaises(KeyError, lambda: helpers.get_specific_sample_rates(TEST_NOISE_RAW, test_type))
-        self.assertRaises(KeyError, lambda: helpers.get_specific_sample_rates(TEST_NOISE_PROCESSED, test_type))
+        self.assertRaises(FileNotFoundError, lambda: load_data.resample_data(wrong_dir, TEST_DATA_PROCESSED))
 
     def test_slice_data(self):
         # Warning for older ffmpeg versions
@@ -46,18 +40,6 @@ class Test(unittest.TestCase):
         # actual test
         for i in helpers.get_duration(TEST_DIR):
             self.assertEqual(i, helpers.DURATION / 1000)
-
-    def test_get_sample_rate_type(self):
-        # Warning for older ffmpeg version
-        warnings.simplefilter("ignore", ResourceWarning)
-
-        load_data.slice_audio(TEST_NOISE_RAW, TEST_DIR)
-
-        for i in helpers.get_specific_sample_rates(TEST_DIR, "aircon"):
-            self.assertEqual(44100, i)
-
-        for j in helpers.get_specific_sample_rates(TEST_DIR, "dishwasher"):
-            self.assertEqual(44100, j)
 
     def test_zero_dB_calculation(self):
         for file in os.listdir(TEST_NOISE_PROCESSED):

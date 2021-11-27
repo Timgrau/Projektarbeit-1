@@ -1,4 +1,4 @@
-from sample.constants import DATA_RAW, DATA_PROCESSED, NOISE_PROCESSED, NOISE_RAW
+from main.constants import DATA_RAW, DATA_PROCESSED, NOISE_PROCESSED, NOISE_RAW
 
 """
 
@@ -8,7 +8,7 @@ from the terminal and in a CI/CD-Pipeline.
 python3 -m unittest
 
 NOTE: Tests do no longer run in an IDE with this paths.
--> Use paths from sample.constants
+-> Use paths from main.constants
 
 TODO: Write a separate local testfile for the IDE.
 """
