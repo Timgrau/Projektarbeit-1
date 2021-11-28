@@ -23,24 +23,49 @@ def write_txt_file():
 
 
 def create_h5py_file():
-    """ Creates a HDF5 File with all desired groups. """
+    """ Creates a HDF5 File with all desired groups and attributes. """
 
-    # a = Read/write if exists, create otherwise
+    # a => Read/write if exists, create otherwise
     file = h5py.File("../numerical-data.hdf5", "a")
 
-    data_groups = ["audio", "noise"]
+    # main groups / sub groups
+    noise_chunks = file.create_group("chunks/noise")
+    audio_chunks = file.create_group("chunks/audio")
+    noisy_chunks = file.create_group("noisy_chunks")
+
+    # sub groups
     db_groups = ["10", "15", "20"]
 
-    for subgroup in data_groups:
-        file.create_group("raw/" + subgroup)
-        file.create_group("chunks/" + subgroup)
+    attributes = {
+        "sample_rate": SAMPLE_RATE,
+        "duration": DURATION,
+        "domain": "spectrogram"
+    }
+
+    for data in os.listdir(DATA_PROCESSED):
+        audio_chunks.create_group(data.replace(".wav", ""))
+
+    for noise in os.listdir(NOISE_PROCESSED):
+        noise_chunks.create_group(noise.replace(".wav", ""))
 
     for group in db_groups:
         for subgroup in open("../noisy-chunks.txt"):
-            file.create_group("noisy-chunks/" +
-                              group + "/" +
-                              subgroup.replace("\n", ""))
+            noisy_chunks.create_group(group + "/" +
+                                      subgroup.replace("\n", ""))
+
+    for attr, val in attributes.items():
+        noisy_chunks.attrs[attr] = val
+        file["chunks"].attrs[attr] = val
 
 
-def write_h5py_file(h5py_file):
-    file = h5py_file(h5py_file)
+def write_h5py_file(h5py_file="../numerical-data.hdf5"):
+    """
+
+    :param h5py_file:
+    :return:
+    """
+
+    # r+ => Read/write, file must exist
+    file = h5py.File(h5py_file, "r+")
+
+
