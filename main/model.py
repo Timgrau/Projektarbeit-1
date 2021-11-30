@@ -1,9 +1,8 @@
 import tensorflow as tf
 from tensorflow.keras import layers
-from tensorflow.keras.models import Model
 
 
-class Autoencoder(Model):
+class Autoencoder(tf.keras.Model):
     def __init__(self):
         super(Autoencoder, self).__init__()
         self.encoder = tf.keras.Sequential([
@@ -25,7 +24,7 @@ class Autoencoder(Model):
             layers.Conv2D(1, (6, 6), padding='same')
         ])
 
-        def call(self, x):
-            encoder = self.encoder(x)
-            decoder = self.decoder(encoder)
-            return decoder
+    def call(self, x):
+        encoder = self.encoder(x)
+        decoder = self.decoder(encoder)
+        return decoder

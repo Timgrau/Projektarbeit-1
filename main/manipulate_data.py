@@ -1,76 +1,102 @@
-import numpy as np
-from main.helpers import *
-from main.calculation import *
+from main.helpers import Copier
+from main.calculation import get_noisy_sound
+from main.constants import *
+import librosa as lr
 import os
 import soundfile
 from pydub import AudioSegment
+import numpy as np
 
 
-def resample_data(path, save_path, sample_rate=SAMPLE_RATE):
-    """ Takes all the audio files in the passed path resamples
-    them to an constant main rate and stores them in save_path.
+class Manipulator(Copier):
+    """ Manipulator Class inherit from Helper """
 
-    :param path: Path to the audio files (str)
-    :param save_path: Path you want to store your copied data (str)
-    :param sample_rate: main rate you want to resample (int)
-    """
+    def __init__(self, path, save_path, sample_rate=SAMPLE_RATE, duration=DURATION):
+        """ Constructor of the Manipulator calls the constructor of the subclass.
 
-    copy_data(path, save_path)
+        :param path: Path to the data (str)
+        :param save_path: Path you want to store your manipulated data (str)
+        :param duration: Duration of a piece in milliseconds (int)
+        """
+        super().__init__(path, save_path)
+        self.duration = duration
+        self.sample_rate = sample_rate
 
-    i = 0
-    for files in os.listdir(save_path):
-        data, _ = lr.load(save_path + files, sr=sample_rate, mono=True)
-        soundfile.write(save_path + files, data, sample_rate)
-        i += 1
+    def resample_data(self):
+        """ Takes all the audio files in the passed path resamples
+        them to an constant main rate and stores them in save_path.
+        """
 
-    print("%s files from %s resampled to %s Hz and copied into %s" % (i, path, sample_rate, save_path))
+        i = 0
+        for files in os.listdir(self.path):
+            data, _ = lr.load(self.path + files, sr=self.sample_rate, mono=True)
+            soundfile.write(self.path + files, data, self.sample_rate)
+            i += 1
+
+        print("%s files from %s resampled to %s Hz and written into %s" % (
+            i, self.path, self.sample_rate, self.path))
+
+    def slice_audio(self):
+        """ Cut audio files into pieces with same duration and save the pieces
+        in save_path as a .wav file. Uses AudioSegment from pydub, which uses ffmpeg.
+        """
+
+        for file in os.listdir(self.path):
+            data = AudioSegment.from_file(self.path + file)
+
+            # Cut first 8 sec from use_data, cause it does not contain realistic information
+            if self.path == DATA_RAW or self.path == DATA_RESAMPLED:
+                data = data[8000:]
+
+            # Iterate over every first 5 seconds of the signal with chunk
+            for i, chunk in enumerate(data[::self.duration]):
+                if len(chunk) == self.duration:
+                    with open(self.save_path + file.replace(AUDIOFORMAT, "") + "_%s" % i + ".wav", "wb") as f:
+                        chunk.export(f, format="wav")
+                else:
+                    print("%s got sliced into %s pieces and exported" % (file, i + 1))
+                    print("Duration of last chunk is %s sec file will be ignored" % (len(chunk) / 1000))
+                    print("-" * 60)
 
 
-def slice_audio(path, save_path, duration=DURATION):
-    """ Cut audio files into pieces with same duration and save the pieces
-    in save_path as a .wav file. Uses AudioSegment from pydub, which uses ffmpeg.
+class Augmenter:
+    """Class to create Inputs for a Loss-function or a NN"""
 
-    :param path: Path the audio files you want to slice are stored (str)
-    :param save_path: Path you want to store your sliced data (str)
-    :param duration: Duration of a piece in milliseconds (int)
-    """
+    def __init__(self, audio_matrix, noise_matrix, signal_to_noise_ratio=10):
+        """Constructor of the Augmenter
+        :param audio_matrix: matrix containing audio signal each row (fixed length)
+        :param noise_matrix: matrix containing noise signal each row (fixed length)
+        :param signal_to_noise_ratio: desired SNR dB (integer)"""
 
-    for file in os.listdir(path):
-        data = AudioSegment.from_file(path + file)
+        self.audio_matrix = audio_matrix
+        self.noise_matrix = noise_matrix
+        self.signal_to_noise_ratio = signal_to_noise_ratio
 
-        # Cut first 8 sec from use_data, cause it does not contain realistic information
-        if path == DATA_RAW or path == DATA_RESAMPLED:
-            data = data[8000:]
+    def get_noise_input(self):
+        """Adds every single noise signal (row) from the noise_matrix to every single
+        audio signal (row) from the audio_matrix for a desired signal to noise ratio.
+        Returns a 3D-Matrix
 
-        # Iterate over every first 5 seconds of the signal with chunk
-        for i, chunk in enumerate(data[::duration]):
-            if len(chunk) == duration:
-                with open(save_path + file.replace(AUDIOFORMAT, "") + "_%s" % i + ".wav", "wb") as f:
-                    chunk.export(f, format="wav")
-            else:
-                print("%s got sliced into %s pieces and exported" % (file, i + 1))
-                print("Duration of last chunk is %s sec file will be ignored" % (len(chunk) / 1000))
-                print("-" * 60)
+        :return: Noisy input data (Tensor)"""
 
+        ret = []
 
-def add_noise_to_audio(audio_matrix, noise_matrix, signal_to_noise_ratio=10):
-    """ Adds every single noise signal (row) from the noise_matrix to every single
-    audio signal (row) from the audio_matrix for a desired signal to noise ratio.
-    Returns a 3D-Matrix
+        for i in self.audio_matrix:
+            for j in self.noise_matrix:
+                ret.append(np.abs(lr.stft(get_noisy_sound(i, j, self.signal_to_noise_ratio))))
+        return np.array(ret)
 
-    :param audio_matrix: matrix containing a discrete audio signal each row
-    :param noise_matrix: matrix containing a discrete noise signal each row
-    :param signal_to_noise_ratio: desired SNR dB (integer)
-    :return: 3D-Matrix or Tensor
-    """
+    def get_clean_input(self):
+        """Returns the clean spectrogram output of the audio chunks.
+        Each chunk will be contained 100 times in the matrix, could
+        be used for the Loss function of a NN.
 
-    ret = []
-    shape_audio = audio_matrix.shape[0]
-    shape_noise = noise_matrix.shape[0]
+        :return: Clean input data (Tensor)"""
 
-    shape_samples = int(DURATION / 1000 * SAMPLE_RATE)
+        ret = []
 
-    for i in audio_matrix:
-        for j in noise_matrix:
-            ret.append(get_noisy_sound(i, j, signal_to_noise_ratio))
-    return np.array(ret).reshape((shape_audio, shape_noise, shape_samples))
+        for i in self.audio_matrix:
+            spec = np.abs(lr.stft(i))
+            for j in range(0, 100):
+                ret.append(spec)
+        return np.array(ret)
