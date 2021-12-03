@@ -64,12 +64,14 @@ class HDF5File:
         if str(db_snr) in self.db_groups and str(db_snr) not in list(chunks_n):
             chunks_n.create_dataset(
                 str(db_snr),
-                data=noisy_matrix)
+                data=noisy_matrix,
+                compression="gzip")
         else:
             raise KeyError("{} dB not found in db_groups or already exists".format(db_snr))
 
-        if "chunks" not in list(file):
+        if "audio" not in list(file["chunks"]):
             # write audio chunks into the file
             file["chunks"].create_dataset(
                 self.chunk_groups[1],
-                data=audio_matrix)
+                data=audio_matrix,
+                compression="gzip")

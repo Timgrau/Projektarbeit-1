@@ -85,3 +85,9 @@ class Copier:
 
         for files in os.listdir(self.path):
             shutil.copy(self.path + files, self.save_path + files)
+
+
+class Zipper:
+    def __init__(self):
+        def unzip(*args):
+            return
