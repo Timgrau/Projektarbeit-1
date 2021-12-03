@@ -25,7 +25,7 @@ class HDF5File:
 
         :param file_path: Path and filename (str)"""
         self.file_path = file_path
-        self.db_groups = ["10", "15", "20"]
+        self.db_groups = ["0", "5", "10"]
         self.chunk_groups = ["noise", "audio"]
 
     def create(self):
@@ -59,15 +59,17 @@ class HDF5File:
 
         # r+ => Read/write, file must exist
         file = h5py.File(self.file_path, "r+")
+        chunks_n = file["noisy_chunks"]
 
-        if str(db_snr) in self.db_groups:
-            file["noisy_chunks"].create_dataset(
+        if str(db_snr) in self.db_groups and str(db_snr) not in list(chunks_n):
+            chunks_n.create_dataset(
                 str(db_snr),
                 data=noisy_matrix)
         else:
-            raise KeyError("{} dB not found in db_groups".format(db_snr))
+            raise KeyError("{} dB not found in db_groups or already exists".format(db_snr))
 
-        # write audio chunks into the file
-        file["chunks"].create_dataset(
-            self.chunk_groups[1],
-            data=audio_matrix)
+        if "chunks" not in list(file):
+            # write audio chunks into the file
+            file["chunks"].create_dataset(
+                self.chunk_groups[1],
+                data=audio_matrix)

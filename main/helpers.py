@@ -12,6 +12,7 @@ class Helper:
 
         :param path: Path where the data is stored (str)
         :param sample_rate: sample rate you want to resample (int)"""
+
         if os.path.exists(path):
             self.path = path
         else:

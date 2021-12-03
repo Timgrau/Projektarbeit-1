@@ -35,8 +35,8 @@ manipulator.slice_audio()   # path -> save_path
 # manipulator can copy data through the dirs
 manipulator.copy_data()
 
-# TODO: Create a pipeline and stream data into the pipline
-# TODO: Implement automated denoising for the pipline
+# TODO: Create a pipeline and stream data into the pipeline
+# TODO: Implement automated denoising for the pipeline
 ```
 #### Audiodaten augmentieren:
 ```python
@@ -74,9 +74,9 @@ with the groups and datasets:
 * `"chunks/audio"`
 
 Different SNR dB Data should be available:
-* `"noisy_chunks/10/"` 
-* `"noisy_chunks/15/"`
-* `"noisy_chunks/20/"`
+* `"noisy_chunks/0/"` 
+* `"noisy_chunks/5/"`
+* `"noisy_chunks/10/"`
 
 
 ```python

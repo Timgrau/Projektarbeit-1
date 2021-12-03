@@ -9,7 +9,7 @@ import numpy as np
 
 
 class Manipulator(Copier):
-    """ Manipulator Class inherit from Helper """
+    """ Manipulator Class inherit from Copier """
 
     def __init__(self, path, save_path, sample_rate=SAMPLE_RATE, duration=DURATION):
         """ Constructor of the Manipulator calls the constructor of the subclass.
@@ -83,7 +83,8 @@ class Augmenter:
 
         for i in self.audio_matrix:
             for j in self.noise_matrix:
-                ret.append(np.abs(lr.stft(get_noisy_sound(i, j, self.signal_to_noise_ratio))))
+                noisy_chunk = get_noisy_sound(i, j, self.signal_to_noise_ratio)
+                ret.append(lr.amplitude_to_db(np.abs(lr.stft(noisy_chunk, n_fft=527, win_length=516, hop_length=257))))
         return np.array(ret)
 
     def get_clean_input(self):
@@ -96,7 +97,7 @@ class Augmenter:
         ret = []
 
         for i in self.audio_matrix:
-            spec = np.abs(lr.stft(i))
+            spec = lr.amplitude_to_db(np.abs(lr.stft(i, n_fft=527, win_length=516, hop_length=257)))
             for j in range(0, 100):
                 ret.append(spec)
         return np.array(ret)
