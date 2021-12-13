@@ -14,7 +14,7 @@ Funktionalitäten angeboten werden, um additiv Störgeräusche einem Audiodatens
 ---
 
 ## Funktionalität:
-#### Resample and slice data into 16KHz and 5 sec Duration:
+#### Resample and slice data into 16KHz and 3 sec Duration:
 ```python
 # Import the Manipulator
 from main.manipulate_data import Manipulator
@@ -24,7 +24,7 @@ path = "/raw/data/stored/"
 save_path = "/store/clean/data/"
 
 # Create Manipulator object
-manipulator = Manipulator(path, save_path, sample_rate=16000, duration=5000)
+manipulator = Manipulator(path, save_path, sample_rate=16000, duration=3000)
 
 # resamples the data and overwrites the old ones
 manipulator.resample_data()

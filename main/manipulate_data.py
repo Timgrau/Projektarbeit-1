@@ -44,9 +44,9 @@ class Manipulator(Copier):
         for file in os.listdir(self.path):
             data = AudioSegment.from_file(self.path + file)
 
-            # Cut first 8 sec from use_data, cause it does not contain realistic information
-            if self.path == DATA_RAW or self.path == DATA_RESAMPLED:
-                data = data[8000:]
+            # Cut first 13 sec and last 5 sec from use_data, cause it does not contain realistic information
+            if "usage" in file:
+                data = data[13000:len(data)-5000]
 
             # Iterate over every first 5 seconds of the signal with chunk
             for i, chunk in enumerate(data[::self.duration]):
@@ -54,7 +54,7 @@ class Manipulator(Copier):
                     with open(self.save_path + file.replace(AUDIOFORMAT, "") + "_%s" % i + ".wav", "wb") as f:
                         chunk.export(f, format="wav")
                 else:
-                    print("%s got sliced into %s pieces and exported" % (file, i + 1))
+                    print("%s got sliced into %s pieces and exported" % (file, i))
                     print("Duration of last chunk is %s sec file will be ignored" % (len(chunk) / 1000))
                     print("-" * 60)
 
@@ -72,7 +72,7 @@ class Augmenter:
         self.noise_matrix = noise_matrix
         self.signal_to_noise_ratio = signal_to_noise_ratio
 
-    def get_noise_input(self):
+    def get_noise_input(self, n_fft=510, win_length=510, hop_length=376):
         """Adds every single noise signal (row) from the noise_matrix to every single
         audio signal (row) from the audio_matrix for a desired signal to noise ratio.
         Returns a 3D-Matrix
@@ -84,10 +84,13 @@ class Augmenter:
         for i in self.audio_matrix:
             for j in self.noise_matrix:
                 noisy_chunk = get_noisy_sound(i, j, self.signal_to_noise_ratio)
-                ret.append(lr.amplitude_to_db(np.abs(lr.stft(noisy_chunk, n_fft=527, win_length=516, hop_length=257))))
+                # lr.amplitude_to_db(np.abs())
+                ret.append(lr.stft(noisy_chunk, n_fft=n_fft,
+                                   win_length=win_length,
+                                   hop_length=hop_length))
         return np.array(ret)
 
-    def get_clean_input(self):
+    def get_clean_input(self, n_fft=510, win_length=510, hop_length=376):
         """Returns the clean spectrogram output of the audio chunks.
         Each chunk will be contained 100 times in the matrix, could
         be used for the Loss function of a NN.
@@ -97,7 +100,10 @@ class Augmenter:
         ret = []
 
         for i in self.audio_matrix:
-            spec = lr.amplitude_to_db(np.abs(lr.stft(i, n_fft=527, win_length=516, hop_length=257)))
-            for j in range(0, 100):
+            # lr.amplitude_to_db(np.abs())
+            spec = lr.stft(i, n_fft=n_fft,
+                           win_length=win_length,
+                           hop_length=hop_length)
+            for j in range(0, len(self.noise_matrix)):
                 ret.append(spec)
         return np.array(ret)

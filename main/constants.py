@@ -12,4 +12,4 @@ DATA_RESAMPLED = "../use_data/resampled/"
 DATA_PROCESSED = "../use_data/processed/"
 
 AUDIOFORMAT = ".wav"
-DURATION = 5000  # milliseconds
+DURATION = 3000  # milliseconds
