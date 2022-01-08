@@ -2,8 +2,8 @@ from main.constants import DATA_RAW, DATA_PROCESSED, NOISE_PROCESSED, NOISE_RAW
 
 """
 
-Changes on relativ paths to run unittest
-from the terminal and in a CI/CD-Pipeline.
+Changes on relative paths to run unittest
+from the terminal.
 
 python3 -m unittest
 

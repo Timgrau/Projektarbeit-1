@@ -77,14 +77,13 @@ class Augmenter:
         audio signal (row) from the audio_matrix for a desired signal to noise ratio.
         Returns a 3D-Matrix
 
-        :return: Noisy input data (Tensor)"""
+        :return: noisy spectrogram data (Tensor)"""
 
         ret = []
 
         for i in self.audio_matrix:
             for j in self.noise_matrix:
                 noisy_chunk = get_noisy_sound(i, j, self.signal_to_noise_ratio)
-                # lr.amplitude_to_db(np.abs())
                 ret.append(lr.stft(noisy_chunk, n_fft=n_fft,
                                    win_length=win_length,
                                    hop_length=hop_length))
@@ -92,15 +91,14 @@ class Augmenter:
 
     def get_clean_input(self, n_fft=510, win_length=510, hop_length=376):
         """Returns the clean spectrogram output of the audio chunks.
-        Each chunk will be contained 100 times in the matrix, could
-        be used for the Loss function of a NN.
+        Each chunk will be contained len(noise_matrix) times in the matrix.
+        Returns a 3D-Matrix.
 
-        :return: Clean input data (Tensor)"""
+        :return: clean spectrogram data (Tensor)"""
 
         ret = []
 
         for i in self.audio_matrix:
-            # lr.amplitude_to_db(np.abs())
             spec = lr.stft(i, n_fft=n_fft,
                            win_length=win_length,
                            hop_length=hop_length)

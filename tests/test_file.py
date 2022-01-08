@@ -27,7 +27,6 @@ class Test(unittest.TestCase):
     def test_down_sample(self):
         Manipulator(DATA_RAW, TEST_DIR).copy_data()
 
-        # TODO: Overload constructor for (one Path)
         manipulator_data = Manipulator(TEST_DIR, TEST_DIR)
         manipulator_data.resample_data()
 
@@ -49,8 +48,8 @@ class Test(unittest.TestCase):
         Test.cleaner.clean_dir()
 
         # Creating Objects
-        manipulator_data = Manipulator(TEST_DATA_RAW, TEST_DIR)
-        manipulator_noise = Manipulator(TEST_NOISE_RAW, TEST_DIR)
+        manipulator_data = Manipulator(DATA_RAW, TEST_DIR)
+        manipulator_noise = Manipulator(NOISE_RAW, TEST_DIR)
 
         # Slice audio files and safe them in test directory
         manipulator_data.slice_audio()
@@ -58,20 +57,20 @@ class Test(unittest.TestCase):
 
         # actual test
         for i in Test.helper.get_duration():
-            self.assertEqual(i, 5000 / 1000)
+            self.assertEqual(i, 3000 / 1000)
 
     def test_zero_dB_calculation(self):
-        for file in os.listdir(TEST_NOISE_PROCESSED):
-            noise, _ = lr.load(TEST_NOISE_PROCESSED + file, sr=16000)
+        for file in os.listdir(NOISE_PROCESSED):
+            noise, _ = lr.load(NOISE_PROCESSED + file, sr=16000)
 
-            for files in os.listdir(TEST_DATA_PROCESSED):
-                audio, _ = lr.load(TEST_DATA_PROCESSED + files, sr=16000)
+            for files in os.listdir(DATA_PROCESSED):
+                audio, _ = lr.load(DATA_PROCESSED + files, sr=16000)
                 power_noise = calculation.mean_power(calculation.get_constant(audio, noise, 10) * noise)
                 self.assertEqual(10, round(calculation.snr(calculation.mean_power(audio), power_noise)))
 
     def test_create_tensor(self):
-        noise_matrix = Helper(TEST_NOISE_PROCESSED).get_numpy_data()
-        audio_matrix = Helper(TEST_DATA_PROCESSED).get_numpy_data()
+        noise_matrix = Helper(NOISE_PROCESSED).get_numpy_data()
+        audio_matrix = Helper(DATA_PROCESSED).get_numpy_data()
         augmenter = Augmenter(audio_matrix, noise_matrix, 10)
         augmenter.get_noise_input()
         augmenter.get_noise_input()
